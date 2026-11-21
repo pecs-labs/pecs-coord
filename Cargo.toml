@@ -1,0 +1,41 @@
+[package]
+name = "pecs-coord"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["pecs-labs"]
+description = "Production-grade distributed coordination primitives for Rust: lease-backed mutual exclusion locks with fencing tokens, atomic occurrence claims, and pluggable backends (etcd, memory)."
+repository = "https://github.com/pecs-labs/pecs-coord"
+homepage = "https://github.com/pecs-labs/pecs-coord"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["distributed-lock", "etcd", "coordination", "fencing-token", "lease"]
+categories = ["asynchronous", "concurrency", "network-programming"]
+
+[features]
+default = ["memory", "etcd"]
+memory = []
+etcd = ["dep:etcd-client"]
+
+[dependencies]
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+tokio = { version = "1.0", features = ["sync", "time", "rt", "macros"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+tracing = "0.1"
+
+# Etcd backend (optional)
+etcd-client = { version = "0.19", optional = true, features = ["tls-roots"] }
+
+[dev-dependencies]
+tokio = { version = "1.0", features = ["full", "macros", "test-util"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[[example]]
+name = "quickstart"
+required-features = ["memory"]
+
+[[example]]
+name = "etcd"
+required-features = ["etcd"]
