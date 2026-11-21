@@ -16,10 +16,12 @@ pub mod config;
 pub mod error;
 #[cfg(any(feature = "etcd", test))]
 pub(crate) mod lease;
+pub mod runner;
 pub mod traits;
 
 pub use config::{validate_resource_name, EtcdConfig, EtcdTlsConfig, LockConfig};
 pub use error::{CoordError, CoordResult};
+pub use runner::{Coordinator, TaskSlot};
 pub use traits::{DistributedLock, LockHandle, OccurrenceClaim};
 
 #[cfg(feature = "etcd")]
@@ -31,6 +33,7 @@ pub use backend::memory::{MemoryLockGuard, MemoryLockService};
 pub mod prelude {
     pub use crate::config::{EtcdConfig, EtcdTlsConfig, LockConfig};
     pub use crate::error::{CoordError, CoordResult};
+    pub use crate::runner::{Coordinator, TaskSlot};
     pub use crate::traits::{DistributedLock, LockHandle, OccurrenceClaim};
 
     #[cfg(feature = "etcd")]

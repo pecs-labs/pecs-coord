@@ -37,5 +37,9 @@ name = "quickstart"
 required-features = ["memory"]
 
 [[example]]
+name = "scheduled_job"
+required-features = ["memory"]
+
+[[example]]
 name = "etcd"
 required-features = ["etcd"]

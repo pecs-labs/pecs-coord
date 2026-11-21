@@ -52,6 +52,30 @@ impl CoordError {
     pub fn other(msg: impl Into<String>) -> Self {
         Self::Other(msg.into())
     }
+
+    /// 是否为超时错误 (`CoordError::Timeout`)
+    #[inline]
+    pub fn is_timeout(&self) -> bool {
+        matches!(self, Self::Timeout(_))
+    }
+
+    /// 是否为锁所有权丢失错误 (`CoordError::Lost`)
+    #[inline]
+    pub fn is_lost(&self) -> bool {
+        matches!(self, Self::Lost(_))
+    }
+
+    /// 是否为配置或资源名非法错误 (`CoordError::Config`)
+    #[inline]
+    pub fn is_config(&self) -> bool {
+        matches!(self, Self::Config(_))
+    }
+
+    /// 是否为后端连接/认证错误 (`CoordError::Connection`)
+    #[inline]
+    pub fn is_connection(&self) -> bool {
+        matches!(self, Self::Connection(_))
+    }
 }
 
 pub type CoordResult<T> = Result<T, CoordError>;

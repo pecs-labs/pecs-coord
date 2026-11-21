@@ -39,6 +39,16 @@ impl LeaseValidity {
         *self.deadline.lock().unwrap()
     }
 
+    /// 返回当前本地单调时钟下的剩余有效时长（已失锁或过期时返回 `Duration::ZERO`）。
+    pub(crate) fn remaining(&self) -> Duration {
+        if self.is_lost() {
+            return Duration::ZERO;
+        }
+        self.deadline()
+            .checked_duration_since(tokio::time::Instant::now())
+            .unwrap_or(Duration::ZERO)
+    }
+
     pub(crate) fn cancel(&self) {
         self.lost.cancel();
     }

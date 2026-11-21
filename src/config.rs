@@ -38,7 +38,10 @@ impl Default for LockConfig {
 }
 
 impl LockConfig {
-    /// Create an enabled configuration for the given keyspace prefix with safe defaults.
+    /// 构建已开启 (`enabled = true`) 且采用安全默认超时参数的分布式锁配置。
+    ///
+    /// # 参数说明 (Arguments)
+    /// - `prefix`: 锁与认领记录的全局命名空间前缀（如 `"/pecs/prod/locks"`，同一环境下的所有副本必须一致，不同环境必须隔离）。
     pub fn enabled(prefix: impl Into<String>) -> Self {
         Self {
             enabled: true,
@@ -47,16 +50,19 @@ impl LockConfig {
         }
     }
 
+    /// 设置锁租约在后端的 TTL 秒数（`secs` 必须 `>= 3` 且满足 `rpc_timeout_ms < secs * 1000 / 3`）。
     pub fn with_lease_ttl_secs(mut self, secs: i64) -> Self {
         self.lease_ttl_secs = secs;
         self
     }
 
+    /// 设置调用 `acquire()` 时默认的排队等锁最大耗时（毫秒，`ms` 必须 `> 0`）。
     pub fn with_acquire_timeout_ms(mut self, ms: u64) -> Self {
         self.acquire_timeout_ms = ms;
         self
     }
 
+    /// 设置单次底层 RPC 请求（如申请租约、续租、释放锁）的超时时间（毫秒，`ms` 必须 `> 0`）。
     pub fn with_rpc_timeout_ms(mut self, ms: u64) -> Self {
         self.rpc_timeout_ms = ms;
         self
